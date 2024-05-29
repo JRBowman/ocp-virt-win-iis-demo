@@ -14,4 +14,5 @@
 > You can substitute `localhost` with the Route provided by OpenShift to access the same application pages.
 
 > TODO: add more detailed instructions, links to Windows Server Evaluation ISO, and Finish the SysPrep file to automatically install the IIS Server Role
+
 > ADD: Primary YAML definition, Pipeline and Deployment for Angular UI application in Container.
