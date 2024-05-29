@@ -11,6 +11,6 @@
 ## Application URLs:
 - http://localhost/swagger (from the Windows Server machine, access the OpenAPI spec document of the .NET API)
 - http://localhost/api/v1/health (from the Windows Server machine, get .NET API Health Check & Status)
->> You can substitute `localhost` with the Route provided by OpenShift to access the same application pages.
+> You can substitute `localhost` with the Route provided by OpenShift to access the same application pages.
 
-`TODO: add more detailed instructions, links to Windows Server Evaluation ISO, and Finish the SysPrep file to automatically install the IIS Server Role`
+> TODO: add more detailed instructions, links to Windows Server Evaluation ISO, and Finish the SysPrep file to automatically install the IIS Server Role
