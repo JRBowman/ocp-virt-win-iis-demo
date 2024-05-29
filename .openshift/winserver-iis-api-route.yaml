@@ -1,0 +1,15 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: solace-core
+  labels: {}
+spec:
+  to:
+    kind: Service
+    name: solace-api
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+    destinationCACertificate: ''
+  port:
+    targetPort: 80

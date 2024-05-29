@@ -1,0 +1,136 @@
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: winserver-iis
+  labels:
+    app: winserver-iis
+    app.kubernetes.io/part-of: dotnet-modernization
+    vm.kubevirt.io/template: windows2k22-server-medium
+    vm.kubevirt.io/template.namespace: openshift
+    vm.kubevirt.io/template.revision: '1'
+    vm.kubevirt.io/template.version: v0.26.0
+spec:
+  dataVolumeTemplates:
+    - metadata:
+        name: winserver-iis-installation-cdrom
+      spec:
+        source:
+          http:
+            url: 'http://rhdata6.dota-lab.iad.redhat.com/win2022.iso'
+        storage:
+          resources:
+            requests:
+              storage: 20Gi
+    - metadata:
+        name: winserver-iis
+      spec:
+        preallocation: false
+        source:
+          blank: {}
+        storage:
+          resources:
+            requests:
+              storage: 60Gi
+  running: true
+  template:
+    metadata:
+      annotations:
+        vm.kubevirt.io/flavor: medium
+        vm.kubevirt.io/os: windows2k22
+        vm.kubevirt.io/workload: server
+      labels:
+        kubevirt.io/domain: winserver-iis
+        kubevirt.io/size: medium
+    spec:
+      architecture: amd64
+      domain:
+        clock:
+          timer:
+            hpet:
+              present: false
+            hyperv: {}
+            pit:
+              tickPolicy: delay
+            rtc:
+              tickPolicy: catchup
+          utc: {}
+        cpu:
+          cores: 2
+          sockets: 1
+          threads: 1
+        devices:
+          disks:
+            - bootOrder: 1
+              disk:
+                bus: scsi
+              name: rootdisk
+            - bootOrder: 2
+              cdrom:
+                bus: sata
+              name: installation-cdrom
+            - cdrom:
+                bus: sata
+              name: windows-drivers-disk
+            - cdrom:
+                bus: sata
+              name: sysprep
+          inputs:
+            - bus: usb
+              name: tablet
+              type: tablet
+          interfaces:
+            - bridge: {}
+              macAddress:
+              model: e1000e
+              name: podnet
+              ports:
+              - name: rdp
+                protocol: TCP
+                port: 3389
+          tpm: {}
+        features:
+          acpi: {}
+          apic: {}
+          hyperv:
+            frequencies: {}
+            ipi: {}
+            reenlightenment: {}
+            relaxed: {}
+            reset: {}
+            runtime: {}
+            spinlocks:
+              spinlocks: 8191
+            synic: {}
+            synictimer:
+              direct: {}
+            tlbflush: {}
+            vapic: {}
+            vpindex: {}
+          smm: {}
+        firmware:
+          bootloader:
+            efi:
+              secureBoot: true
+        machine:
+          type: pc-q35-rhel9.2.0
+        memory:
+          guest: 4Gi
+        resources: {}
+      networks:
+        - name: podnet
+          pod: {}
+      terminationGracePeriodSeconds: 3600
+      volumes:
+        - dataVolume:
+            name: winserver-iis
+          name: rootdisk
+        - dataVolume:
+            name: winserver-iis-installation-cdrom
+          name: installation-cdrom
+        - containerDisk:
+            image: 'registry.redhat.io/container-native-virtualization/virtio-win@sha256:b379e84b76b7712cd5f9756e419ff21232dce8b82589bc96fc90eed612606c32'
+          name: windows-drivers-disk
+        - name: sysprep
+          sysprep:
+            configMap:
+              name: sysprep-winserver-iis
