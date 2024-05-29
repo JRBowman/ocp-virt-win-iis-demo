@@ -30,7 +30,7 @@ Remove-Item -Path $installerPath -Force
 ## 2.) Add the .NET ASP Application to IIS:
 
 # Variables
-$dotnetUrl = "https://solacetk-core-api-dev-bowman-dev.apps.sno.bowmansoftworks.com/Artifacts/dotnet-iis-app.zip"
+$dotnetUrl = "https://github.com/JRBowman/ocp-virt-win-iis-demo/raw/master/dotnet-iis-app.zip"
 $zipFilePath = "C:\Temp\dotnet-iis-app.zip"
 $destinationPath = "C:\Temp\dotnet-iis-app"
 $iisDefaultSitePath = "C:\inetpub\wwwroot"
