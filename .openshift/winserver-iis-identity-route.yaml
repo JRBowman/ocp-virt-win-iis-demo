@@ -1,12 +1,12 @@
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name: solace-core
+  name: solacetk-identity
   labels: {}
 spec:
   to:
     kind: Service
-    name: solacetk-api
+    name: solacetk-identity
   tls:
     termination: edge
     insecureEdgeTerminationPolicy: Redirect
