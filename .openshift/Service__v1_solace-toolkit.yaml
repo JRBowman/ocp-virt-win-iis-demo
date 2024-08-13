@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    app.openshift.io/vcs-ref: master
+    app.openshift.io/vcs-uri: https://github.com/JRBowman/solace-toolkit.git
+  labels:
+    app: solacetk-ui
+    app.kubernetes.io/component: solacetk-ui
+    app.kubernetes.io/instance: solacetk-ui
+    app.kubernetes.io/name: solacetk-ui
+    app.openshift.io/runtime: angularjs
+  name: solacetk-ui
+spec:
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - name: 8080-tcp
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: solacetk-ui
+    deploymentconfig: solacetk-ui
+  sessionAffinity: None
+  type: ClusterIP

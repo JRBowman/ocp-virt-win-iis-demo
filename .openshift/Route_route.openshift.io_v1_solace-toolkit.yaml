@@ -1,0 +1,23 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    openshift.io/host.generated: "true"
+  labels:
+    app: solacetk-ui
+    app.kubernetes.io/component: solacetk-ui
+    app.kubernetes.io/instance: solacetk-ui
+    app.kubernetes.io/name: solacetk-ui
+    app.openshift.io/runtime: angularjs
+  name: solacetk-ui
+spec:
+  port:
+    targetPort: 8080-tcp
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: solacetk-ui
+    weight: 100
+  wildcardPolicy: None

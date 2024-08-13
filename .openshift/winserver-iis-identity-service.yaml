@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: solacetk-api
+  name: solacetk-identity
 spec:
   selector:
     app: winserver-iis
   ports:
     - protocol: TCP
       port: 8080
-      targetPort: 8080
+      targetPort: 8081
