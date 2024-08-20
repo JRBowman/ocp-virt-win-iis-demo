@@ -32,7 +32,8 @@ Remove-Item -Path $installerPath -Force
 # Variables
 $dotnetUrl = "https://github.com/JRBowman/ocp-virt-win-iis-demo/raw/master/dotnet-iis-app.zip"
 $zipFilePath = "C:\Temp\dotnet-iis-app.zip"
-$destinationPath = "C:\Temp\dotnet-iis-app"
+$destinationPath = "C:\Temp\"
+$applicationPath = "C:\Temp\dotnet-iis-app\*"
 $iisDefaultSitePath = "C:\inetpub\wwwroot"
 
 # Create Temp Directory if it doesn't exist
