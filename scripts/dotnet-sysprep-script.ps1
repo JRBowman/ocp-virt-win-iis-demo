@@ -210,7 +210,7 @@ function Add-IISSiteToPool {
 Add-IISASPCoreHostingModule
 
 ## 2.) Add the .NET ASP Application to IIS:
-$solacetkBackendUrl = "https://github.com/JRBowman/ocp-virt-win-iis-demo/raw/master/dotnet-iis-app.zip"
+$solacetkBackendUrl = "https://github.com/JRBowman/ocp-virt-win-iis-demo/raw/master/solacetk-core-app.zip"
 #$solacetkIdentityUrl = "https://github.com/JRBowman/ocp-virt-win-iis-demo/raw/master/dotnet-identity-app.zip"
 
 Add-IISSiteToPool -SiteName "SolaceTK-Core" -AppPoolName "SolaceTK-Core" -AppUrl $solacetkBackendUrl -Port 8080
