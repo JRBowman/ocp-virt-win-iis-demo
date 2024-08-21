@@ -164,7 +164,7 @@ function New-IISBinding {
     )
 
      # Check if the site binding already exists
-    $bindingExists = Get-WebBinding -Name $SiteName -BindingInformation "*:$Port:" -ErrorAction SilentlyContinue
+    $bindingExists = Get-WebBinding -Name $SiteName -BindingInformation "*:$Port" -ErrorAction SilentlyContinue
     if (!$bindingExists) {
         # Add a new binding for the application
         New-WebBinding -Name $SiteName -Protocol "http" -Port $Port -IPAddress "*" -HostHeader ""
