@@ -58,6 +58,30 @@ function Set-IISAppPoolLimits {
     Write-Host "'$AppPoolName' Limits have been configured!"
 }
 
+function New-FirewallRule {
+    param (
+        [string]$Name,
+        [int]$Port
+    )
+
+    # Check if a firewall rule with the specified name already exists
+    $existingRule = Get-NetFirewallRule -DisplayName $Name -ErrorAction SilentlyContinue
+
+    if ($null -ne $existingRule) {
+        Write-Host "Firewall rule '$Name' already exists. Skipping creation."
+    } else {
+        # Create a new inbound firewall rule
+        New-NetFirewallRule -DisplayName $Name `
+                            -Direction Inbound `
+                            -LocalPort $Port `
+                            -Protocol TCP `
+                            -Action Allow `
+                            -Profile Any `
+                            -Description "Inbound rule for $Name on port $Port"
+        Write-Host "Firewall rule '$Name' created successfully for port $Port."
+    }
+}
+
 function New-IISSiteWithAppPool {
     param (
         [string]$SiteName,
@@ -70,11 +94,11 @@ function New-IISSiteWithAppPool {
     Import-Module WebAdministration
 
     # Check if the Application Pool already exists, if not create it
-    if (-not (Get-WebAppPoolState -Name $AppPoolName -ErrorAction SilentlyContinue)) {
+    if (Test-Path "IIS:\AppPools\$AppPoolName") {
+        Write-Host "Application Pool '$AppPoolName' already exists. Skipping creation."
+    } else {
         New-WebAppPool -Name $AppPoolName
         Write-Host "Application Pool '$AppPoolName' created successfully."
-    } else {
-        Write-Host "Application Pool '$AppPoolName' already exists. Skipping creation."
     }
 
     # Check if the site already exists
@@ -117,7 +141,7 @@ function New-DotNetIISApplication {
 
     # Unzip the contents:
     Add-Type -AssemblyName System.IO.Compression.FileSystem
-    [System.IO.Compression.ZipFile]::ExtractToDirectory($zipFilePath, "C:\Temp\")
+    [System.IO.Compression.ZipFile]::ExtractToDirectory($zipFilePath, "C:\Temp\$Name")
 
     # Copy the contents of the app to the IIS Directory:
     $destinationPath = "C:\Temp\$Name"
@@ -173,6 +197,11 @@ function Add-IISSiteToPool {
     # 3.) Obtain and Copy the .NET Application to the Site Directory:
     New-DotNetIISApplication -Name $SiteName -URL $AppUrl -TargetDirectory $physicalPath
 
+    # 4.) Create a Windows Inbound Firewall Rule:
+    New-FirewallRule -Name $SiteName -Port $Port
+
+    Write-Host ""
+    Write-Host "'$SiteName' Created."
 }
 
 # Main Script to Create and Configure IIS Sites:
