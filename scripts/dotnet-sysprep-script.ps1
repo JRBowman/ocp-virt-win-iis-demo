@@ -44,12 +44,15 @@ function Set-IISAppPoolLimits {
     if (Get-WebAppPoolState -Name $AppPoolName -ErrorAction SilentlyContinue) {
         Write-Host "Application Pool '$AppPoolName' Exists."
 
+        $appPool = Get-Item "IIS:\AppPools\$AppPoolName"
+
         # Set the CPU limits
-        Set-ItemProperty "IIS:\AppPools\$AppPoolName" -Name "cpu.limit" -Value $CPULimit
+        $appPool | Set-ItemProperty -Name "cpu.limit" -Value ($CPULimit * 1000)
+        $appPool | Set-ItemProperty -Name "cpu.action" -Value "ThrottleUnderLoad"
         Write-Host "CPU Limit for '$AppPoolName' set to $CPULimit%."
 
         # Set the Memory limits
-        Set-ItemProperty "IIS:\AppPools\$AppPoolName" -Name "recycling.periodicRestart.privateMemory" -Value $MemoryLimit
+        $appPool | Set-ItemProperty "IIS:\AppPools\$AppPoolName" -Name "recycling.periodicRestart.privateMemory" -Value $MemoryLimit
         Write-Host "Memory Limit for '$AppPoolName' set to $MemoryLimit."
     } else {
         Write-Host "Application Pool '$AppPoolName' does not exist, can't set Limits."

@@ -1,7 +1,7 @@
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name: solacetk-api
+  name: solacetk-identity
   labels: {}
 spec:
   to:
@@ -12,4 +12,4 @@ spec:
     insecureEdgeTerminationPolicy: Redirect
     destinationCACertificate: ''
   port:
-    targetPort: 8080
+    targetPort: 8081
