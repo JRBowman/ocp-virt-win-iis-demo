@@ -4,7 +4,7 @@ metadata:
   name: solacetk-api
 spec:
   selector:
-    app: winserver-iis
+    vm.kubevirt.io/name: winserver-iis
   ports:
     - protocol: TCP
       port: 8080
